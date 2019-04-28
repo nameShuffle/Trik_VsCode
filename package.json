@@ -16,12 +16,12 @@
 	"contributes": {
 		"commands": [{
 			"command": "extension.runTrikPlugin",
-			"title": "Run Trik Plugin"
+			"title": "Run TRIK Plugin"
 		}],
 		
 		"configuration": {
 			"type": "object",
-			"title": "Robot configuration",
+			"title": "TRIK Robot",
 			"properties": {
 			  "trik.port": {
 				"type": "number",
