@@ -10,7 +10,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.sendFileTrik"
+    "onCommand:extension.sendFileTrik",
+    "onCommand:extension.runFileTrik"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -18,6 +19,10 @@
       {
         "command": "extension.sendFileTrik",
         "title": "Send file to TRIK"
+      },
+      {
+        "command": "extension.runFileTrik",
+        "title": "Run file on TRIK"
       }
     ],
     "configuration": {

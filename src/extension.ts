@@ -53,6 +53,33 @@ const onConfigurationChange = () => {
 	}
 }
 
+// Отправка открытого в редакторе файла на робота.
+const sendActiveFileToRobot = () => {
+	var editor = vscode.window.activeTextEditor;
+	if (!editor) {
+		return; 
+	}
+
+	var text = editor.document.getText();
+	var fileName = editor.document.fileName;
+
+	var connection = new Connection (currentAddress, currentPort);
+	connection.sendCommand('file', fileName + ':' + text);
+}
+
+// Запуск открытого в редакторе файла на роботе.
+const runActiveFileOnRobot = () => {
+	var editor = vscode.window.activeTextEditor;
+	if (!editor) {
+		return; 
+	}
+
+	var text = editor.document.getText();
+
+	var connection = new Connection (currentAddress, currentPort);
+	connection.sendCommand('run', text);
+}
+
 // Данный метод вызывается при активации расширения.
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "trikextension" is now active!');
@@ -61,17 +88,12 @@ export function activate(context: vscode.ExtensionContext) {
 	changeConfiguration = vscode.workspace.onDidChangeConfiguration(onConfigurationChange);
 
 	context.subscriptions.push(vscode.commands.registerCommand('extension.sendFileTrik', () => {
-		vscode.window.showInformationMessage('Active!');
-		var editor = vscode.window.activeTextEditor;
-		if (!editor) {
-    		return; 
-		}
-
-		var text = editor.document.getText();
-		var fileName = editor.document.fileName;
-
-		var connection = new Connection (currentAddress, currentPort);
-		connection.sendCommand('file', fileName + ':' + text);
+		vscode.window.showInformationMessage('Sending begins!');
+		sendActiveFileToRobot();
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.runFileTrik', () => {
+		vscode.window.showInformationMessage('Running begins!');
+		runActiveFileOnRobot();
 	}));
 }
 
