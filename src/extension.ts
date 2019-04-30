@@ -65,7 +65,7 @@ const sendActiveFileToRobot = () => {
 	}
 
 	var text = editor.document.getText();
-	var fileName = editor.document.fileName;
+	var fileName = editor.document.fileName.split("/").pop();
 
 	var connection = new Connection (currentAddress, currentPort, output);
 	connection.sendCommand('file', fileName + ':' + text);

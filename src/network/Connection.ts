@@ -62,6 +62,7 @@ class Connection {
         
         socket.on('data', (data) =>{
             console.log("Data recieved: " + data.toString());
+            this.output.appendLine("Data recieved: " + data.toString());
             socket.end();
         });
     }
