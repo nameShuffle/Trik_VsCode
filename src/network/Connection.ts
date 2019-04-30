@@ -1,37 +1,45 @@
-import * as io from 'socket.io-client';
+import * as vscode from 'vscode';
+import * as net from 'net';
 
 class Connection {
     private port : number;
     private address : string;
 
-    constructor (address : string, port : number) {
+    private output : vscode.OutputChannel;
+
+    constructor (address : string, port : number, output : vscode.OutputChannel) {
         this.address = address; 
         this.port = port;
+
+        this.output = output;
     }
 
-    private initConnection() {
-        var socket = io.connect('http://' + this.address, { autoConnect : false, port: this.port.toString() });
+    private initConnection() : net.Socket {
+        var socket = net.createConnection({port: this.port, host: this.address});
         
-        socket.on('connect_error)', (error : Error) => {
-            console.log("Connection failed.")
-        });
-        socket.on('connect_timeout', () => {
-            console.log("Connection failed.")            
-        });
-        socket.on('connect', () => {
-            console.log("Connected successfully.")
-        });
-        socket.on('error', () => {
-            console.log("Something bad happened. Please try again!");
+        socket.setTimeout(3000);
+        socket.on('timeout', () => {
+            console.log('Socket timeout.');
+            this.output.appendLine('Socket timeout.');
+            socket.end();
         });
 
-        socket.open();
+        socket.on('error', () => {
+            console.log("Something bad happened. Please try again!");
+            this.output.appendLine('Something bad happened. Please try again!');
+        });
+
+        socket.on('end', () => {
+            console.log("Disconnected from server.");
+            this.output.appendLine("Disconnected from server.");
+        });
 
         return socket;
     }
 
     sendCommand (commandType : string, command : string) {
         console.log("Trying to connect...");
+        this.output.appendLine("Trying to connect...");
         var socket = this.initConnection();
 
         var commandToSend : string;
@@ -41,12 +49,29 @@ class Connection {
         else {
             commandToSend = commandType + ":" + command;
         }
+        
+        commandToSend = commandToSend.length.toString() + ':' + commandToSend;
 
-        console.log("Trying to send commond to robot...")
-        socket.send(commandToSend);
+        socket.on('ready', () => {
+            console.log("Connected successfully. Ready to send data.");
+            this.output.appendLine("Connected successfully. Ready to send data.");
+            console.log("Trying to send command to robot...");
+            this.output.appendLine("Trying to send command to robot...");
+            socket.write(commandToSend);
+        });
+        
+        socket.on('data', (data) =>{
+            console.log("Data recieved: " + data.toString());
+            socket.end();
+        });
+    }
 
-        socket.close();
-        console.log("Finished.");
+    setAddress (address : string) {
+        this.address = address;
+    }
+
+    setPort (port : number) {
+        this.port = port;
     }
 }
 

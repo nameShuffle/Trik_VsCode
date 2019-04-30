@@ -6,6 +6,8 @@ var changeConfiguration : vscode.Disposable;
 var currentPort : number;
 var currentAddress : string;
 
+var output = vscode.window.createOutputChannel(`TRIK output`);
+
 // Получение текущей конфигурации из настроек пользователя раздела Trik Robot.
 const getConfiguration = () => {
 	var trikConfiguration = vscode.workspace.getConfiguration('trik');
@@ -25,12 +27,14 @@ const initRobotData = () => {
 	if (configuration.port == undefined)
 	{
 		console.log("Номер порта не объявлен!");
+		output.appendLine('The port number is undefined!');
 		return;
 	}
 	
 	if (configuration.address == undefined)
 	{
 		console.log("Адрес не объявлен!");
+		output.appendLine('The address is undefined!');
 		return;
 	}
 
@@ -63,7 +67,7 @@ const sendActiveFileToRobot = () => {
 	var text = editor.document.getText();
 	var fileName = editor.document.fileName;
 
-	var connection = new Connection (currentAddress, currentPort);
+	var connection = new Connection (currentAddress, currentPort, output);
 	connection.sendCommand('file', fileName + ':' + text);
 }
 
@@ -76,7 +80,7 @@ const runActiveFileOnRobot = () => {
 
 	var text = editor.document.getText();
 
-	var connection = new Connection (currentAddress, currentPort);
+	var connection = new Connection (currentAddress, currentPort, output);
 	connection.sendCommand('run', text);
 }
 
@@ -86,6 +90,8 @@ export function activate(context: vscode.ExtensionContext) {
 
 	initRobotData();
 	changeConfiguration = vscode.workspace.onDidChangeConfiguration(onConfigurationChange);
+
+	output.show(true);
 
 	context.subscriptions.push(vscode.commands.registerCommand('extension.sendFileTrik', () => {
 		vscode.window.showInformationMessage('Sending begins!');
