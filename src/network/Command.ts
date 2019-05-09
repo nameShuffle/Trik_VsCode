@@ -20,7 +20,7 @@ class Command {
     private createCommand() {
         var commandVisoutLength : string;
 
-        if (this.content == '') {
+        if (this.content === '') {
             commandVisoutLength = this.type;
         }
         else {
