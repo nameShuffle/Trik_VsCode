@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import Connection from './network/Connection';
+import TrikConnection from './network/TrikConnection';
 
 var changeConfiguration : vscode.Disposable;
 
@@ -8,7 +8,7 @@ var currentAddress : string;
 
 var output = vscode.window.createOutputChannel(`TRIK output`);
 
-// Получение текущей конфигурации из настроек пользователя раздела Trik Robot.
+/// Получение текущей конфигурации, указанной пользователем в настройках.
 const getConfiguration = () => {
 	var trikConfiguration = vscode.workspace.getConfiguration('trik');
 
@@ -20,20 +20,19 @@ const getConfiguration = () => {
 	return configuration;
 }
 
-// Инициализация данных о роботе на основе полученных настроек пользователя.
+/// Инициализация данных о роботе на основе настроек пользователя.
+/// Сохранение текущего значения адреса и номера порта.
 const initRobotData = () => {
 	var configuration = getConfiguration();
 
 	if (configuration.port == undefined)
 	{
-		console.log("Номер порта не объявлен!");
 		output.appendLine('The port number is undefined!');
 		return;
 	}
 	
 	if (configuration.address == undefined)
 	{
-		console.log("Адрес не объявлен!");
 		output.appendLine('The address is undefined!');
 		return;
 	}
@@ -42,7 +41,8 @@ const initRobotData = () => {
 	currentAddress = configuration.address;
 }
 
-// Данных метод вызывается при изменении пользователем настроек конфигурации в разделе TRIK Robot.
+/// Данные метод вызывается при изменении пользователем данных о роботе в настройках. 
+/// Получение нового значения адреса и номера порта и их сохранение.
 const onConfigurationChange = () => {
 	var newConfiguration = getConfiguration();
 
@@ -57,22 +57,29 @@ const onConfigurationChange = () => {
 	}
 }
 
-// Отправка открытого в редакторе файла на робота.
+/// Метод для отправки открытого в редакторе файла на робота. 
+/// Получение текста и имени открытого файла, формирование необходимой команды и непосредственно отправка команды на робота.
 const sendActiveFileToRobot = () => {
+	output.appendLine("Sending file to robot:");
 	var editor = vscode.window.activeTextEditor;
 	if (!editor) {
 		return; 
 	}
 
 	var text = editor.document.getText();
-	var fileName = editor.document.fileName.split("/").pop();
 
-	var connection = new Connection (currentAddress, currentPort, output);
+	var fullName = editor.document.fileName;
+	var pathArray = fullName.split("/");
+	var fileName = pathArray[pathArray.length - 1];
+
+	var connection = new TrikConnection (currentAddress, currentPort, output);
 	connection.sendCommand('file', fileName + ':' + text);
 }
 
-// Запуск открытого в редакторе файла на роботе.
+/// Запуск открытого в редакторе файла на роботе.
+/// Получение текста открытого в редакторе файла, формирование необходимой команды и непосредственно отправка команды на робота.
 const runActiveFileOnRobot = () => {
+	output.appendLine("Running current program on robot:");
 	var editor = vscode.window.activeTextEditor;
 	if (!editor) {
 		return; 
@@ -80,11 +87,45 @@ const runActiveFileOnRobot = () => {
 
 	var text = editor.document.getText();
 
-	var connection = new Connection (currentAddress, currentPort, output);
-	connection.sendCommand('run', text);
+	var connection = new TrikConnection(currentAddress, currentPort, output);
+	connection.sendCommand('direct', text);
 }
 
-// Данный метод вызывается при активации расширения.
+/// Запуск файла по имени.
+/// Получение имени файла, формирование необходимой команды и непосредственно отправка команды на робота.
+const runFileByName = () => {
+	// На данный момент метод нигде не используется.
+	output.appendLine("Running file by name:")
+	var editor = vscode.window.activeTextEditor;
+	if (!editor) {
+		return; 
+	}
+
+	var fullName = editor.document.fileName;
+	var pathArray = fullName.split("/");
+	var fileName = pathArray[pathArray.length - 1];
+
+	var connection = new TrikConnection(currentAddress, currentPort, output);
+	connection.sendCommand('run', fileName);
+}
+
+/// Остановка выполения запущенной программы на роботе. 
+/// Формирование необходимой команды и непосредственно отправка команды на робота.
+const stopExecution = () => {
+	output.appendLine("Stopping execution on robot:");
+	var connection = new TrikConnection(currentAddress, currentPort, output);
+	connection.sendCommand('stop', '');
+}
+
+/// Проверка активность робота.
+/// Формирование необходимой команды и непосредственно отправка команды на робота.
+const isAlive = () => {
+	output.appendLine("Checking if robot is alive:");
+	var connection = new TrikConnection(currentAddress, currentPort, output);
+	connection.sendCommand('keepalive', '');
+}
+
+/// Данный метод вызывается при активации расширения. Инициализация начальных данных о роботе, регистрация необходимых команд.
 export function activate(context: vscode.ExtensionContext) {
 	console.log('Congratulations, your extension "trikextension" is now active!');
 
@@ -97,13 +138,23 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Sending begins!');
 		sendActiveFileToRobot();
 	}));
+
 	context.subscriptions.push(vscode.commands.registerCommand('extension.runFileTrik', () => {
 		vscode.window.showInformationMessage('Running begins!');
 		runActiveFileOnRobot();
 	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('extension.isAlive', () => {
+		isAlive();
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('extension.stopExecution', () => {
+		vscode.window.showInformationMessage('Stopping execution!');
+		stopExecution();
+	}));
 }
 
-// Данный метод вызывается при отключении расширения.
+/// Данный метод вызывается при деактивации расширения. 
 export function deactivate() {
 	changeConfiguration.dispose();
 }

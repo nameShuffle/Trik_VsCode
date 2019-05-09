@@ -10,6 +10,7 @@
     "Other"
   ],
   "activationEvents": [
+    "*",
     "onCommand:extension.sendFileTrik",
     "onCommand:extension.runFileTrik"
   ],
@@ -23,6 +24,14 @@
       {
         "command": "extension.runFileTrik",
         "title": "Run file on TRIK"
+      },
+      {
+        "command": "extension.isAlive",
+        "title": "Ckeck if robot is active"
+      },
+      {
+        "command": "extension.stopExecution",
+        "title": "Stop execution on TRIK"  
       }
     ],
     "configuration": {
