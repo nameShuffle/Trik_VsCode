@@ -136,9 +136,12 @@ const isAlive = () => {
 	connection.sendCommand('keepalive', '');
 };
 
+/// Показывает текущее значение переменных в исполняющемся на роботе скрипте.
 const getVariables = () => {
 	output.appendLine("Getting variables...");
 	var variablesConnection = new VariablesConnection(currentAddress, currentVariablesPort, output);
+
+	variablesConnection.showVariables();
 };
 
 /// Данный метод вызывается при активации расширения. Инициализация начальных данных о роботе, регистрация необходимых команд.
@@ -167,6 +170,11 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('extension.stopExecution', () => {
 		vscode.window.showInformationMessage('Stopping execution!');
 		stopExecution();
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('extension.getVariables', () => {
+		vscode.window.showInformationMessage('Getting variables...');
+		getVariables();
 	}));
 }
 
