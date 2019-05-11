@@ -23,7 +23,6 @@ class VariablesConnection extends Connection {
         });
         
         socket.on('data', (receivedData:string) => {
-            ///TODO: Обработка receivedData
             var jsonPosition = receivedData.indexOf('{');
             var jsonVariablesString = receivedData.substring(jsonPosition);
 
@@ -34,3 +33,5 @@ class VariablesConnection extends Connection {
         });
     }
 }
+
+export default VariablesConnection;

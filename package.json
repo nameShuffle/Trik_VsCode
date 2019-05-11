@@ -47,6 +47,11 @@
           "type": "number",
           "default": 8888,
           "description": "Port to connect on."
+        },
+        "trik.variablesPort": {
+        "type": "number",
+        "default": 10000,
+        "description": "Port to connect to variables server."
         }
       }
     }
