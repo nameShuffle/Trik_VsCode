@@ -22,26 +22,26 @@ const getConfiguration = () => {
 	};
 
 	return configuration;
-};
+}
 
 /// Инициализация данных о роботе на основе настроек пользователя.
 /// Сохранение текущего значения адреса и номера порта.
 const initRobotData = () => {
 	var configuration = getConfiguration();
 
-	if (configuration.port === undefined)
+	if (configuration.port == undefined)
 	{
 		output.appendLine('The port number is undefined!');
 		return;
 	}
 	
-	if (configuration.address === undefined)
+	if (configuration.address == undefined)
 	{
 		output.appendLine('The address is undefined!');
 		return;
 	}
 
-	if (configuration.variablesPort === undefined)
+	if (configuration.variablesPort == undefined)
 	{
 		output.appendLine('The variables port is undefined!');
 		return;
@@ -50,23 +50,23 @@ const initRobotData = () => {
 	currentPort = configuration.port;
 	currentAddress = configuration.address;
 	currentVariablesPort = configuration.variablesPort;
-};
+}
 
 /// Данные метод вызывается при изменении пользователем данных о роботе в настройках. 
 /// Получение нового значения адреса и номера порта и их сохранение.
 const onConfigurationChange = () => {
 	var newConfiguration = getConfiguration();
 
-	if (newConfiguration.port !== currentPort && newConfiguration.port !== undefined)
+	if (newConfiguration.port != currentPort && newConfiguration.port != undefined)
 	{
 		currentPort = newConfiguration.port;
 	}
 
-	if (newConfiguration.address !== currentAddress && newConfiguration.address !== undefined)
+	if (newConfiguration.address != currentAddress && newConfiguration.address != undefined)
 	{
 		currentAddress = newConfiguration.address;
 	}
-};
+}
 
 /// Метод для отправки открытого в редакторе файла на робота. 
 /// Получение текста и имени открытого файла, формирование необходимой команды и непосредственно отправка команды на робота.
@@ -85,7 +85,7 @@ const sendActiveFileToRobot = () => {
 
 	var connection = new TrikConnection (currentAddress, currentPort, output);
 	connection.sendCommand('file', fileName + ':' + text);
-};
+}
 
 /// Запуск открытого в редакторе файла на роботе.
 /// Получение текста открытого в редакторе файла, формирование необходимой команды и непосредственно отправка команды на робота.
@@ -100,13 +100,13 @@ const runActiveFileOnRobot = () => {
 
 	var connection = new TrikConnection(currentAddress, currentPort, output);
 	connection.sendCommand('direct', text);
-};
+}
 
 /// Запуск файла по имени.
 /// Получение имени файла, формирование необходимой команды и непосредственно отправка команды на робота.
 const runFileByName = () => {
 	// На данный момент метод нигде не используется.
-	output.appendLine("Running file by name:")
+	output.appendLine("Running file by name:");
 	var editor = vscode.window.activeTextEditor;
 	if (!editor) {
 		return; 
@@ -118,7 +118,7 @@ const runFileByName = () => {
 
 	var connection = new TrikConnection(currentAddress, currentPort, output);
 	connection.sendCommand('run', fileName);
-};
+}
 
 /// Остановка выполения запущенной программы на роботе. 
 /// Формирование необходимой команды и непосредственно отправка команды на робота.
@@ -126,7 +126,7 @@ const stopExecution = () => {
 	output.appendLine("Stopping execution on robot:");
 	var connection = new TrikConnection(currentAddress, currentPort, output);
 	connection.sendCommand('stop', '');
-};
+}
 
 /// Проверка активность робота.
 /// Формирование необходимой команды и непосредственно отправка команды на робота.
@@ -134,7 +134,7 @@ const isAlive = () => {
 	output.appendLine("Checking if robot is alive:");
 	var connection = new TrikConnection(currentAddress, currentPort, output);
 	connection.sendCommand('keepalive', '');
-};
+}
 
 /// Показывает текущее значение переменных в исполняющемся на роботе скрипте.
 const getVariables = () => {
@@ -142,7 +142,7 @@ const getVariables = () => {
 	var variablesConnection = new VariablesConnection(currentAddress, currentVariablesPort, output);
 
 	variablesConnection.showVariables();
-};
+}
 
 /// Данный метод вызывается при активации расширения. Инициализация начальных данных о роботе, регистрация необходимых команд.
 export function activate(context: vscode.ExtensionContext) {

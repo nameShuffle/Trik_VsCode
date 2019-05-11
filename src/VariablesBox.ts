@@ -1,4 +1,4 @@
-import * as vscode from 'vscode'
+import * as vscode from 'vscode';
 
 /// Класс-контейнер для переменных.
 class VariablesBox {
@@ -9,6 +9,10 @@ class VariablesBox {
         this.jsonVariablesString = jsonString;
     }
 
+    /**
+     * Показывает переменные через заданный стрим.
+     * @param output Заданный выходной стрим.
+     */
     show (output : vscode.OutputChannel){
         let obj = JSON.parse(this.jsonVariablesString);
 

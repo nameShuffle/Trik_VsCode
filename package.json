@@ -32,6 +32,10 @@
       {
         "command": "extension.stopExecution",
         "title": "Stop execution on TRIK"  
+      },
+      {
+        "command": "extension.getVariables",
+        "title": "Get variables from Trik"
       }
     ],
     "configuration": {

@@ -9,6 +9,7 @@ class VariablesConnection extends Connection {
         super(address, port, output);
     }
 
+    /// Узнаёт у сервера текущее состояние переменных и показывает их.
     showVariables(){
         super.output.appendLine("Trying to set variables connection...");
         var socket = super.initConnection();
