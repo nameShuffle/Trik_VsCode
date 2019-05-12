@@ -19,7 +19,7 @@ class Connection {
     protected initConnection() : net.Socket {
         var socket = net.createConnection({ port: this.port, host: this.address });
         
-        socket.setTimeout(30000);
+        socket.setTimeout(3000);
         socket.on('timeout', () => {
             this.output.appendLine('Socket timeout.');
             socket.end();

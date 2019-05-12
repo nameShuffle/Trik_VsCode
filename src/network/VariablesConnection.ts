@@ -11,24 +11,27 @@ class VariablesConnection extends Connection {
 
     /// Узнаёт у сервера текущее состояние переменных и показывает их.
     showVariables(){
-        super.output.appendLine("Trying to set variables connection...");
-        var socket = super.initConnection();
+        this.output.appendLine("Trying to set variables connection...");
+        var socket = this.initConnection();
         
-        var data = "http /web/";
+        var data = "http /web/\n";
 
         socket.on('ready', () => {
-            super.output.appendLine("Connected successfully.");
-            super.output.appendLine("Sending command to robot...");
+            this.output.appendLine("Connected successfully.");
+            this.output.appendLine("Sending command to robot...");
             socket.write(data);
             console.log(data);
         });
         
-        socket.on('data', (receivedData:string) => {
-            var jsonPosition = receivedData.indexOf('{');
-            var jsonVariablesString = receivedData.substring(jsonPosition);
+        socket.on('data', (receivedData) => {
+            var data : string;
+            data = receivedData.toString();
+
+            var jsonPosition = data.indexOf('{');
+            var jsonVariablesString = data.substring(jsonPosition);
 
             var variablesBox = new VariablesBox(jsonVariablesString);
-            variablesBox.show(super.output);
+            variablesBox.show(this.output);
             
             socket.end();
         });

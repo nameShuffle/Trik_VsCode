@@ -12,14 +12,14 @@ class TrikConnection extends Connection{
 
     /// Формирование команды на основе переданных данных, отправка команды на сервер.
     sendCommand (commandType : string, command : string) {
-        super.output.appendLine("Trying to connect...");
-        var socket = super.initConnection();
+        this.output.appendLine("Trying to connect...");
+        var socket = this.initConnection();
 
         var newCommand = new Command(commandType, command);
 
         socket.on('ready', () => {
-            super.output.appendLine("Connected successfully.");
-            super.output.appendLine("Sending command to robot...");
+            this.output.appendLine("Connected successfully.");
+            this.output.appendLine("Sending command to robot...");
             socket.write(newCommand.getCommand());
             console.log(newCommand.getCommand());
         });
@@ -28,7 +28,7 @@ class TrikConnection extends Connection{
             var arrayData = data.toString().split(':');
             var content = arrayData[arrayData.length - 1];
 
-            super.output.appendLine("Data recieved: " + content);
+            this.output.appendLine("Data recieved: " + content);
             socket.end();
         });
     }

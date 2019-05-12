@@ -1,16 +1,16 @@
-/// Класс для удобной работы с командами формата, принимаемого TRIK-роботом.
+/// Класс для удобной работы с командами формата, принимаемого TRI>K-роботом.
 /// Для создания команды необходимо передать тип команды и ее содержимое.
 class Command {
     private type : string;
     private content : string;
-    private length : string;
+    private length : number;
 
     private commandToSend : string;
 
     constructor (commandType : string, commandContent : string) {
         this.type = commandType;
         this.content = commandContent;
-        this.length = '';
+        this.length = 0;
         this.commandToSend = '';
 
         this.createCommand();
@@ -18,22 +18,22 @@ class Command {
 
     /// Приватный метод для формирования полноценной команды, готовой к отправке на робота.
     private createCommand() {
-        var commandVisoutLength : string;
+        var commandWithoutLength : string;
 
-        if (this.content === '') {
-            commandVisoutLength = this.type;
+        if (this.content == '') {
+            commandWithoutLength = this.type;
         }
         else {
-            commandVisoutLength = this.type + ':'+ this.content;
+            commandWithoutLength = this.type + ":" + this.content;
         }
 
-        this.length = commandVisoutLength.length.toString();
+        this.length = commandWithoutLength.length;
         
-        this.commandToSend = this.length + ':' + commandVisoutLength;
+        this.commandToSend = this.length + ":" + commandWithoutLength;
     }
 
     /// Получение длины команды.
-    getLength() : string {
+    getLength() : number {
         return this.length;
     }
 
