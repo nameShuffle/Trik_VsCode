@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import TrikConnection from './network/TrikConnection';
-import VariablesConnection from './network/VariablesConnection';
+import VariablesConnection from './network/VariablesConnection/VariablesConnection';
+import VariablesBox from './VariablesBox';
 
 var changeConfiguration : vscode.Disposable;
 
@@ -10,6 +11,7 @@ var currentVariablesPort : number;
 var currendDebugMode : boolean;
 
 var output = vscode.window.createOutputChannel(`TRIK output`);
+var variablesBox = new VariablesBox();
 
 /** 
  * Получение текущей конфигурации, указанной пользователем в настройках.
@@ -174,9 +176,11 @@ const isAlive = () => {
  */
 const getVariables = () => {
 	output.appendLine("Getting variables...");
-	var variablesConnection = new VariablesConnection(currentAddress, currentVariablesPort, output);
+	var variablesConnection = new VariablesConnection(currentAddress, currentVariablesPort, output, variablesBox);
 
-	variablesConnection.showVariables();
+	variablesConnection.updateVariables(variablesBox);
+
+	output.appendLine(variablesBox.toString());
 };
 
  /**

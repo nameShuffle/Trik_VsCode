@@ -1,4 +1,5 @@
 import * as vscode from 'vscode';
+import * as net from 'net';
 import Command from './Command';
 import Connection from './Connection';
 
@@ -30,8 +31,8 @@ class TrikConnection extends Connection{
             console.log(newCommand.getCommand());
         });
         
-        socket.on('data', (data) => {
-            var arrayData = data.toString().split(':');
+        socket.on('data', (receivedData) => {
+            var arrayData = receivedData.toString().split(':');
             var content = arrayData[arrayData.length - 1];
 
             this.output.appendLine("Data recieved: " + content);

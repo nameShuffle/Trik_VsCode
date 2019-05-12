@@ -5,22 +5,26 @@ import * as vscode from 'vscode';
  */
 class VariablesBox {
 
-    private jsonVariablesString : string;
-
-    constructor (jsonString : string ) {
-        this.jsonVariablesString = jsonString;
-    }
+    private jsonVariablesString : string = "default";
 
     /**
      * Показывает переменные через заданный стрим.
      * @param output Заданный выходной стрим.
      */
-    show (output : vscode.OutputChannel){
+    toString () : string {
+        let resultString : string = "";
+
         let obj = JSON.parse(this.jsonVariablesString);
 
         for (var key in obj) {
-            output.appendLine(key.toString() + ": " + obj[key]);
+            resultString += key.toString() + ": " + obj[key] + "\n";
         }
+
+        return resultString;
+    }
+
+    setJsonVariablesString(jsonVariablesString : string) {
+        this.jsonVariablesString = jsonVariablesString;
     }
 }
 

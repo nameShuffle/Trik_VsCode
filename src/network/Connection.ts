@@ -23,18 +23,15 @@ class Connection {
         
         socket.setTimeout(3000);
         socket.on('timeout', () => {
-            this.output.appendLine('Socket timeout.');
-            socket.end();
+            this.onSocketTimeout(socket);
         });
 
         socket.on('error', () => {
-            this.output.appendLine('Something bad happened. Please try again!');
-            this.output.appendLine("");
+            this.onSocketError(socket);
         });
 
         socket.on('end', () => {
-            this.output.appendLine("Disconnected.");
-            this.output.appendLine("");
+            this.onSocketEnd(socket);
         });
 
         return socket;
@@ -53,13 +50,14 @@ class Connection {
             socket.write(data);
         });
         
-        socket.on('data', (recievedData) => {
-            this.output.appendLine("Data recieved: " + recievedData);
+        socket.on('data', (receivedData) => {
+            this.output.appendLine("Data recieved: " + receivedData);
+
             socket.end();
         });
     }
 
-     setAddress(address : string) {
+    setAddress(address : string) {
         this.address = address;
     }
 
@@ -73,6 +71,25 @@ class Connection {
     
     getPort() : number {
         return this.port;
+    }
+
+    /**
+     * Callback-функции, которые внедряются в socket.on.
+     */
+    protected onSocketTimeout = (socket : net.Socket) => {
+        this.output.appendLine("Socket timeout");
+
+        socket.end();
+    }
+
+    protected onSocketError = (socket : net.Socket) => {
+        this.output.appendLine('Something bad happened. Please try again!');
+        this.output.appendLine("");
+    }
+
+    protected onSocketEnd = (socket : net.Socket) => {
+        this.output.appendLine("Disconnected.");
+        this.output.appendLine("");
     }
 }
 
