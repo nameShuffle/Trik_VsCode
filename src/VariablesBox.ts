@@ -17,7 +17,7 @@ class VariablesBox {
         let obj = JSON.parse(this.jsonVariablesString);
 
         for (var key in obj) {
-            output.appendLine(obj[key]);
+            output.appendLine(key.toString() + ": " + obj[key]);
         }
     }
 }
