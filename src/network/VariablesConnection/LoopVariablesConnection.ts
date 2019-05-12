@@ -57,3 +57,5 @@ class LoopVariablesConnection extends VariablesConnection {
         this.updateVariablesInLoop();
     }
 }
+
+export default LoopVariablesConnection;
