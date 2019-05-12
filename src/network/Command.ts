@@ -1,5 +1,7 @@
-/// Класс для удобной работы с командами формата, принимаемого TRI>K-роботом.
-/// Для создания команды необходимо передать тип команды и ее содержимое.
+/**
+ * Класс для удобной работы с командами формата, принимаемого TRI>K-роботом.
+ * Для создания команды необходимо передать тип команды и ее содержимое.
+ */
 class Command {
     private type : string;
     private content : string;
@@ -16,11 +18,13 @@ class Command {
         this.createCommand();
     }
 
-    /// Приватный метод для формирования полноценной команды, готовой к отправке на робота.
+    /**
+     * Приватный метод для формирования полноценной команды, готовой к отправке на робота.
+     */
     private createCommand() {
         var commandWithoutLength : string;
 
-        if (this.content == '') {
+        if (this.content === '') {
             commandWithoutLength = this.type;
         }
         else {
@@ -32,22 +36,18 @@ class Command {
         this.commandToSend = this.length + ":" + commandWithoutLength;
     }
 
-    /// Получение длины команды.
     getLength() : number {
         return this.length;
     }
 
-    /// Получение полноценной команды.
     getCommand() : string {
         return this.commandToSend;
     }
 
-    /// Получение типа команды.
     getCommandType() : string {
         return this.type;
     }
 
-    /// Получение содержимого команды.
     getCommandContent() : string {
         return this.content;
     }

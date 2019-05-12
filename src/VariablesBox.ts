@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 
-/// Класс-контейнер для переменных.
+/**
+ * Класс-контейнер для переменных.
+ */
 class VariablesBox {
 
     private jsonVariablesString : string;

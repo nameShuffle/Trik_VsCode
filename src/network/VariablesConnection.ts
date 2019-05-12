@@ -3,14 +3,18 @@ import Connection from './Connection';
 import VariablesBox from '../VariablesBox';
 import { stringify } from 'querystring';
 
-/// Класс необходим для извленчения информации о переменных.
+/**
+ * Класс необходим для извленчения информации о переменных.
+ */
 class VariablesConnection extends Connection {
 
     constructor (address : string, port : number, output : vscode.OutputChannel) {
         super(address, port, output);
     }
 
-    /// Узнаёт у сервера текущее состояние переменных и показывает их.
+    /**
+     * Узнаёт у сервера текущее состояние переменных и показывает их.
+     */
     showVariables(){
         this.output.appendLine("Trying to set variables connection...");
         var socket = this.initConnection();

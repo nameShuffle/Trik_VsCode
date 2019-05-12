@@ -56,6 +56,11 @@
         "type": "number",
         "default": 10000,
         "description": "Port to connect to variables server."
+        },
+        "trik.debugMode": {
+          "type": "boolean",
+          "default": true,
+          "description": "Debug mod on"
         }
       }
     }

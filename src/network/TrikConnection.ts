@@ -2,15 +2,21 @@ import * as vscode from 'vscode';
 import Command from './Command';
 import Connection from './Connection';
 
-/// Класс для удобства общения с роботом.
-/// Использовуется для подключения к роботу на основе имеющейся конфигурации и отпраки команд.
+/**
+ * Класс для удобства общения с роботом.
+ * Использовуется для подключения к роботу на основе имеющейся конфигурации и отпраки команд.
+ */
 class TrikConnection extends Connection{
 
     constructor (address : string, port : number, output : vscode.OutputChannel) {
         super(address, port, output);
     }
 
-    /// Формирование команды на основе переданных данных, отправка команды на сервер.
+    /**
+     * Формирование команды на основе переданных данных, отправка команды на сервер.
+     * @param commandType -- Тип команды.
+     * @param command -- Содержимое команды.
+     */
     sendCommand (commandType : string, command : string) {
         this.output.appendLine("Trying to connect...");
         var socket = this.initConnection();

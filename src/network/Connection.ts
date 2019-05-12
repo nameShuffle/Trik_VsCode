@@ -15,7 +15,9 @@ class Connection {
         this.output = output;
     }
 
-    /// Метод для инициализации соединения - создание сокета.
+    /**
+     * Метод для инициализации соединения.
+     */
     protected initConnection() : net.Socket {
         var socket = net.createConnection({ port: this.port, host: this.address });
         
@@ -38,7 +40,10 @@ class Connection {
         return socket;
     }
 
-    /// отправка данных на сервер по указанному адресу.
+    /**
+     * Отправка данных на сервер по указанному адресу.
+     * @param data -- Данные, которые отправляет данный метод серверу.
+     */
     public send(data : string) {
         this.output.appendLine("Trying to connect...");
         var socket = this.initConnection();
@@ -54,22 +59,18 @@ class Connection {
         });
     }
 
-     /// Сохранение нового адреса.
      setAddress(address : string) {
         this.address = address;
     }
 
-    /// Сохранение нового номера порта.
     setPort(port : number) {
         this.port = port;
     }
 
-    /// Получение текущего адреса.
     getAddress() : string {
         return this.address;
     }
-
-    /// Получение текущего номера порта.
+    
     getPort() : number {
         return this.port;
     }
