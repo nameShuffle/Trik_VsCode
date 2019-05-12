@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import Connection from './Connection';
 import VariablesBox from '../VariablesBox';
+import { stringify } from 'querystring';
 
 /// Класс необходим для извленчения информации о переменных.
 class VariablesConnection extends Connection {
